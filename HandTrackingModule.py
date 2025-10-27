@@ -14,9 +14,26 @@ class handDetector():
        self.mp_hands = mp.solutions.hands
        self.hands = self.mpHands.Hands(self.mode, self.max_hands, self.detection_con, self.track_con)
        self.mpDraw = mp.solutions.drawing_utils
-       
-pTime = 0
-cTime = 0
+
+    def find_hands(self, img, draw=True):
+        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) #convert to rgb
+        results = self.hands.process(imgRGB) #get landmarks from image
+        if results.multi_hand_landmarks: 
+            if draw:
+                self.mpDraw.draw_landmarks(img, handLms, self.mp_hands.HAND_CONNECTIONS)
+                return img
+            else:
+                return 0
+
+            for handLms in results.multi_hand_landmarks: #get landmarks of each hand
+                for id, lm in enumerate(handLms.landmark):  
+                    h, w, c = img.shape # get shape of image (height, width, color channel)
+                    cx, cy = int(lm.x*w), int(lm.y*h) #get x and y of landmark in pixels
+                    print(id, cx, cy)
+                    #draws on the landmark 0
+                    if id == 0: 
+                        cv2.circle(img, (cx, cy), 28, (255,0,255), cv2.FILLED) #draw circle at landmark 0 (img, (x, y, radius_px, (R,G,B), type)
+                self.mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS) 
 
 while True:
     success, img = cap.read()
@@ -47,10 +64,10 @@ if __name__ == "__main__"
     cap = cv2.VideoCapture(0)
     pTime = 0
     cTime = 0
-
+    detector = handDetector()
     while True:
         success, img = cap.read()
-    # count fps
+        detector.find_hands(img)    # count fps
     cTime = time.time()
     fps = 1/(cTime-pTime)
     pTime = cTime
