@@ -4,20 +4,17 @@ import time
 import numpy as np
 #init camera on camera 0 (inbuilt)
 
-class 
+class handDetector():
+    def __init__(self, mode=False, max_hands, detection_con=0.5, track_con=0.5):
+        self.mode = mode
+        seld.max_hands = max_hands
+        detection_con = detection_con
+        track_con = track_con
 
-
-
-# init mediapipe hand module 
-mpHands = mp.solutions.hands 
-hands = mpHands.Hands(
-        static_image_mode=False, #static mode consciders images as unrelated
-        max_num_hands=2, #maximum number of hands
-        min_detection_confidence=0.5, #minimum confidence to detect hands
-        min_tracking_confidence=0.5 #minimum confidence to track hands
-        )
-        
-mpDraw = mp.solutions.drawing_utils #drawing utilities for mediapipe
+       self.mp_hands = mp.solutions.hands
+       self.hands = self.mpHands.Hands(self.mode, self.max_hands, self.detection_con, self.track_con)
+       self.mpDraw = mp.solutions.drawing_utils
+       
 pTime = 0
 cTime = 0
 
